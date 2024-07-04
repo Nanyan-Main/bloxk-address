@@ -10,3 +10,5 @@ export const HTTP_METHODS = {
 export const STATUS = {
   OK: "OK",
 };
+
+export const MIN_ADDRESS_LENGTH = 40;
