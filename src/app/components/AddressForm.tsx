@@ -1,13 +1,28 @@
 "use client";
+import useAddress from "@/hooks/useAddress";
+import { useToast } from "@/hooks/useToast";
+import { STATUS } from "@/utils/constant";
 import { Form, Formik } from "formik";
 import { object, string } from "yup";
 
 export default function AddressForm() {
+  const { addAddress } = useAddress();
+  const { showToastSuccess, showToastError } = useToast();
   const validationsSchema = object({
-    address: string().required("address is required").min(40),
+    address: string().required("address is required").min(5),
   });
-  const handleSubmit = (address: string) => {
-    console.log(address);
+  const handleSubmit = async (address: string) => {
+    try {
+      const { status, message } = await addAddress(address);
+      if (message && status !== STATUS.OK) {
+        alert(message);
+        return;
+      }
+      showToastSuccess("Success");
+    } catch (error: any) {
+      showToastError(error.message);
+      console.error(error);
+    }
   };
   return (
     <div>
